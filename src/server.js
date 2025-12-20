@@ -1,8 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { connectMongoDB } from './db/connectMongoDB.js';
 import notesRouter from './routes/notesRoutes.js';
+import authRouter from './routes/authRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { errors } from 'celebrate';
 import { logger } from './middleware/logger.js';
@@ -14,9 +16,11 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(logger);
 
-app.use(notesRouter);
+app.use('/notes', notesRouter);
+app.use('/auth', authRouter);
 
 app.use(notFoundHandler);
 app.use(errors());
